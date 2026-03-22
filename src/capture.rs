@@ -133,21 +133,23 @@ mod imp {
 
             let (tx, rx) = mpsc::unbounded_channel();
 
-            std::thread::spawn(move || loop {
-                match capture.next_packet() {
-                    Ok(packet) => {
-                        if tx.send(packet.data.to_vec()).is_err() {
+            std::thread::spawn(move || {
+                loop {
+                    match capture.next_packet() {
+                        Ok(packet) => {
+                            if tx.send(packet.data.to_vec()).is_err() {
+                                break;
+                            }
+                        }
+                        Err(pcap::Error::TimeoutExpired) => {
+                            if tx.is_closed() {
+                                break;
+                            }
+                        }
+                        Err(e) => {
+                            tracing::error!("pcap error: {e}");
                             break;
                         }
-                    }
-                    Err(pcap::Error::TimeoutExpired) => {
-                        if tx.is_closed() {
-                            break;
-                        }
-                    }
-                    Err(e) => {
-                        tracing::error!("pcap error: {e}");
-                        break;
                     }
                 }
             });
@@ -162,4 +164,3 @@ mod imp {
 }
 
 pub use imp::PacketCapture;
-

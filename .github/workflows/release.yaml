@@ -72,9 +72,27 @@ jobs:
             ~/.cargo/git
             target
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-      - name: Install system dependencies
-        run: sudo apt-get update && sudo apt-get install -y libpcap-dev
+      - name: Setup Linux environment
+        run: sudo apt-get update && sudo apt-get install -y flex bison
+      - name: Cache libpcap tarball
+        uses: actions/cache@v4
+        with:
+          path: /tmp/libpcap-1.10.6.tar.gz
+          key: libpcap-1.10.6-tarball
+      - name: Build libpcap
+        run: |
+          cd /tmp
+          [ ! -f libpcap-1.10.6.tar.gz ] && wget https://www.tcpdump.org/release/libpcap-1.10.6.tar.gz
+          echo "872dd11337fe1ab02ad9d4fee047c9da244d695c6ddf34e2ebb733efd4ed8aa9  libpcap-1.10.6.tar.gz" | sha256sum -c
+          tar xzf libpcap-1.10.6.tar.gz
+          cd libpcap-1.10.6
+          ./configure --prefix=/usr --libdir=/usr/lib/x86_64-linux-gnu --disable-dbus
+          make && sudo make install && sudo ldconfig
       - run: cargo build --release
+        env:
+          RUSTFLAGS: "-C link-arg=-Wl,-Bstatic,-lpcap,-Bdynamic"
+      - name: Mark binary executable
+        run: chmod +x target/release/irminsul
       - uses: actions/upload-artifact@v4
         with:
           name: irminsul-linux
