@@ -2340,6 +2340,7 @@ dependencies = [
  "futures",
  "futures-util",
  "indexmap",
+ "libc",
  "log",
  "notify",
  "open",
