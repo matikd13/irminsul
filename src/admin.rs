@@ -86,10 +86,13 @@ pub fn ensure_admin() {
     let has_cap_net_raw = std::fs::read_to_string("/proc/self/status")
         .ok()
         .and_then(|status| {
-            status.lines().find(|l| l.starts_with("CapEff:")).and_then(|line| {
-                let hex = line.split_whitespace().nth(1)?;
-                u64::from_str_radix(hex, 16).ok()
-            })
+            status
+                .lines()
+                .find(|l| l.starts_with("CapEff:"))
+                .and_then(|line| {
+                    let hex = line.split_whitespace().nth(1)?;
+                    u64::from_str_radix(hex, 16).ok()
+                })
         })
         .map(|caps| caps & (1 << 13) != 0)
         .unwrap_or(false);
@@ -101,6 +104,7 @@ pub fn ensure_admin() {
     show_packet_capture_permissions_missing_dialog();
 }
 
+// The code from https://github.com/NyanCatTW1/irminsul
 #[cfg(unix)]
 fn show_packet_capture_permissions_missing_dialog() {
     let options = eframe::NativeOptions {
