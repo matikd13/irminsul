@@ -1,6 +1,6 @@
 [package]
 name = "irminsul"
-version = "0.1.17"
+version = "0.1.19"
 authors = ["Konkers <konkers@konkers.net>"]
 edition = "2024"
 include = ["LICENSE-APACHE", "LICENSE-MIT", "**/*.rs", "Cargo.toml"]
@@ -12,7 +12,7 @@ targets = ["x86_64-unknown-linux-gnu", "wasm32-unknown-unknown"]
 
 [dependencies]
 # Keep these in sync with dev-dependencies below
-anime-game-data = { git = "https://github.com/konkers/anime-game-data", rev = "222bab5d8f3f7c5052360672a9d882e766e70062" }
+anime-game-data = { git = "https://github.com/konkers/anime-game-data", rev = "df004591478efaedb995a425256b8ee535e36eee" }
 flate2 = "1.1.9"
 tokio = { version = "1.47.1", features = [
 	"rt",
@@ -23,7 +23,7 @@ tokio = { version = "1.47.1", features = [
 
 anyhow = "1.0.99"
 async-watcher = "0.3.0"
-auto-artifactarium = { git = "https://github.com/konkers/auto-artifactarium", rev = "07be683fb80e9940d8cc629ab769dbd6307bcaaa" }
+auto-artifactarium = { git = "https://github.com/konkers/auto-artifactarium", rev = "b0338e65d8bebb84149feaada5910f7d2251056f" }
 base64 = "0.22.1"
 chrono = "0.4.42"
 clap = { version = "4.5.47", features = ["derive"] }
@@ -73,7 +73,7 @@ windows = { version = "0.61.3", features = [
 
 [build-dependencies]
 # Keep these in sync with dependencies above
-anime-game-data = { git = "https://github.com/konkers/anime-game-data", rev = "222bab5d8f3f7c5052360672a9d882e766e70062" }
+anime-game-data = { git = "https://github.com/konkers/anime-game-data", rev = "df004591478efaedb995a425256b8ee535e36eee" }
 flate2 = "1.1.9"
 tokio = { version = "1.47.1", features = [
 	"rt",
